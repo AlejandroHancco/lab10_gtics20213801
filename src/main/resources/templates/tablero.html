@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Minijuego</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .tablero {
+            display: grid;
+            grid-template-columns: repeat(10, 50px); /* 10 columnas de 50px */
+            gap: 1px; /* Espacio entre las celdas */
+        }
+        .celda {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 24px;
+            border: 1px solid black; /* Borde negro alrededor de las celdas */
+        }
+        /* Estilo para el botón */
+        .ocultar-btn {
+            background-color: #007bff; /* Azul */
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .ocultar-btn:hover {
+            background-color: #0056b3; /* Azul más oscuro al pasar el ratón */
+            transform: scale(1.05); /* Efecto de ampliación */
+        }
+
+        .ocultar-btn:focus {
+            outline: none; /* Evitar el contorno de enfoque */
+        }
+
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <h1>El Juego del Laberinto</h1>
+
+    <div class="tablero">
+        <!-- Recorriendo las filas -->
+        <div th:each="fila : ${celdas}">
+            <div class="fila">
+                <!-- Recorriendo las celdas dentro de cada fila -->
+                <div th:each="celda : ${fila}"
+                     class="celda"
+                     th:class="'celda ' + (${recursos[celda] != null} ? '' : 'vacia')"
+                     th:style="|background-color: ${celda == 'I' ? '#FFFF00' :
+                                               (celda == 'F' ? '#008000' :
+                                               (celda == 'O' ? '#ADD8E6' :
+                                               (celda == 'A' ? '#000000' :
+                                               'transparent')))}|">
+
+                    <div th:switch="${celda}">
+
+                        <img th:case="'S'" th:src="@{/images/suplantacion.png}"
+                             alt="Suplantación" style="width: 100%; height: 100%;">
+
+                        <img th:case="'C'" th:src="@{/images/copia.png}"
+                             alt="Copia" style="width: 100%; height: 100%;">
+
+                        <img th:case="'P'" th:src="@{/images/plagio.png}"
+                             alt="Plagio" style="width: 100%; height: 100%;">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón para ocultar obstáculos -->
+    <button class="ocultar-btn" onclick="ocultarObstaculos()">Ocultar Obstáculos</button>
+
+</div>
+
+<script>
+
+    function ocultarObstaculos() {
+
+
+        var celdas = document.querySelectorAll('.celda');
+
+
+        celdas.forEach(function(celda) {
+            celda.style.backgroundColor = '#ADD8E6';
+
+
+            var imagen = celda.querySelector('img');
+            if (imagen) {
+                imagen.style.display = 'none';
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
